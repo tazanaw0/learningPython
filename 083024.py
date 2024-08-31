@@ -27,9 +27,14 @@ qty_check = 35
 for fruit, qty in fruit_inventory.items():
     if qty < qty_check:
         print('Items with a qty of less than 35 ->', fruit)
-
-if 'Mango' not in fruit_inventory:
-    print("Mango doesn't exist in inventory")
+# Checks for 'mango' at each item in our dictionary, if it exists, print yes, else, print it doesn't exist
+for name, check in fruit_inventory.items():
+    if 'Mango' in name:
+        print('Yes, mango does exist in our inventory')
+    else:
+        print('Mango doesn\'t exist in inventory')
+#if 'Mango' not in fruit_inventory:
+    #print("Mango doesn't exist in inventory")
 
 #Remove and Display
 fruit_inventory.pop('cherry')
