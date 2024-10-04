@@ -26,16 +26,33 @@ current_question = 0
 def start_quiz(): 
     opening_label.config(text='Quiz starting...')
     question_label.config(text=Questions[current_question])
+# If number of questions are greater than 0, replace the question_label with a question from our list. 
+def show_next_question(): 
+    global current_question #global tag allowing var to be modified w/ in function
+    if current_question < len(Questions)-1:
+        current_question += 1
+        question_label.config(text= Questions[current_question])
+    else:
+        Next_button.config(state='disabled')
+#If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
+def show_previous_question():
+    global current_question
+    if current_question > 0:
+        current_question -=1
+        question_label.config(text=Questions[current_question])
+        Next_button.config(state="normal")
+    else:
+        Previous_button.config(state='disabled') #Disables previous button if we are at first question
 
 #Create buttons
 start_button = Button(q, text='Start', width = 25, command = start_quiz)
 start_button.pack() #Places button in the center of our gui window 
 stop_button = Button(q, text='Stop', width = 25, command=q.destroy)
 stop_button.pack()#Places button in the center of our gui window 
-Next_question = Button(q, text='Next Question', width = 10) #Button user interacts w/ to access other questions
-Next_question.pack()
-Previous_question = Button(q, text='Previous Question', width = 10) #Button user interacts w/ to access previous question
-Previous_question.pack()
+Next_button = Button(q, text='Next Question', width = 10, command=show_next_question) #Button user interacts w/ to access other questions 
+Next_button.pack()
+Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
+Previous_button.pack()
 #Infinite loop that runs until an enduser interacts w/ gui 
 q.mainloop()
 
