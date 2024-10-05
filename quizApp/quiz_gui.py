@@ -11,7 +11,7 @@ q.geometry('350x200')
 #Text presented to user when they open a window 
 opening_label = Label(q, text='Welcome to 2Min Quiz App')
 opening_label.pack() #Places label in center of gui window
-question_label = Label(q, text='Placeholder for current question')
+question_label = Label(q, text='') #Placeholder variable for questions
 question_label.pack() # Places label in center of gui window 
 
 #List of questions that we'll cycle through as the user interacts w/ gui. 
@@ -24,7 +24,7 @@ current_question = 0
 
 #Changes label (welcome msg) in main window once a user clicks start button
 def start_quiz(): 
-    opening_label.config(text='Quiz starting...')
+    opening_label.config(text='You GOT this')
     question_label.config(text=Questions[current_question])
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
@@ -43,6 +43,11 @@ def show_previous_question():
         Next_button.config(state="normal")
     else:
         Previous_button.config(state='disabled') #Disables previous button if we are at first question
+
+#Adds text to buttons and presents them when a user starts quiz. 
+def show_buttons(): 
+    Next_button.config(text='Next Question', width=10, command=show_next_question)
+    Previous_button.config(text='Previous Question', width=10, command=show_previous_question)
 
 #Create buttons
 start_button = Button(q, text='Start', width = 25, command = start_quiz)
