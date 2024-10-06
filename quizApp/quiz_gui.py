@@ -26,6 +26,8 @@ current_question = 0
 def start_quiz(): 
     opening_label.config(text='You GOT this')
     question_label.config(text=Questions[current_question])
+    #Calls function to 'pack' or display buttons once user clicks 'start'
+    show_buttons()
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
     global current_question #global tag allowing var to be modified w/ in function
@@ -44,10 +46,10 @@ def show_previous_question():
     else:
         Previous_button.config(state='disabled') #Disables previous button if we are at first question
 
-#Adds text to buttons and presents them when a user starts quiz. 
+#Places buttons in gui, when function is called upon 
 def show_buttons(): 
-    Next_button.config(text='Next Question', width=10, command=show_next_question)
-    Previous_button.config(text='Previous Question', width=10, command=show_previous_question)
+    Next_button.pack(side=RIGHT)
+    Previous_button.pack(side=LEFT)
 
 #Create buttons
 start_button = Button(q, text='Start', width = 25, command = start_quiz)
@@ -55,10 +57,10 @@ start_button.pack() #Places button in the center of our gui window
 stop_button = Button(q, text='Stop', width = 25, command=q.destroy)
 stop_button.pack()#Places button in the center of our gui window 
 Next_button = Button(q, text='Next Question', width = 10, command=show_next_question) #Button user interacts w/ to access other questions 
-Next_button.pack()
 Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
-Previous_button.pack()
-#Infinite loop that runs until an enduser interacts w/ gui 
+
+#All code stops here, nothing beyond this point is ran.
+#Infinite loop dependent on user interactions with gui to stop. 
 q.mainloop()
 
 
