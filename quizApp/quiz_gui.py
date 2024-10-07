@@ -15,11 +15,15 @@ question_label = Label(q, text='') #Placeholder variable for questions
 question_label.pack() # Places label in center of gui window 
 
 #List of questions that we'll cycle through as the user interacts w/ gui. 
-Questions = ["Question 1: Which out of the following used to protect data in transit?",
-             "Question 2: What can organizations do to ensure compliance with local laws regarding data at rest?", 
-             "Question 3: What is used to protect sensitive information on receipts?"]
+Questions = {
+     0 :("Question 1: Which out of the following is used to protect data in transit?", ['A: SSL/TLS', 'B: Full-Disk Encryption', 'C: Switch', 'D: Applying Permissions'], 'A: SSL/TLS'),
+     1 :("Question 2: What can organizations do to ensure compliance with local laws regarding data at rest?", ['A: Anually skim through regulations and laws', 'B: Constantly monitor where their data is stored', 'C: ', 'D: '], 'A: Anually skim through regulations and laws'), 
+     2 :("Question 3: What is used to protect sensitive information on receipts?", ['A: Tokenization', 'B: Hashing', 'C: Masking', 'D: Encryption']  )
+}
 #Establishes and associates a number to each question, allowing us to keep track of questions. 
 current_question = 0 
+#Keeps track of how many answers are right
+score = 0 
 
 
 #Changes label (welcome msg) in main window once a user clicks start button
@@ -28,14 +32,18 @@ def start_quiz():
     question_label.config(text=Questions[current_question])
     #Calls function to 'pack' or display buttons once user clicks 'start'
     show_buttons()
+
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
     global current_question #global tag allowing var to be modified w/ in function
+    global selected_answer ##stopping point 
+
     if current_question < len(Questions)-1:
         current_question += 1
         question_label.config(text= Questions[current_question])
     else:
         Next_button.config(state='disabled')
+
 #If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
 def show_previous_question():
     global current_question
