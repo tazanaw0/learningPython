@@ -11,14 +11,12 @@ q.geometry('350x200')
 #Text presented to user when they open a window 
 opening_label = Label(q, text='Welcome to 2Min Quiz App')
 opening_label.pack() #Places label in center of gui window
-question_label = Label(q, text='') #Placeholder variable for questions
-question_label.pack() # Places label in center of gui window 
 
 #List of questions that we'll cycle through as the user interacts w/ gui. 
 Questions = {
      0 :("Question 1: Which out of the following is used to protect data in transit?", ['A: SSL/TLS', 'B: Full-Disk Encryption', 'C: Switch', 'D: Applying Permissions'], 'A: SSL/TLS'),
      1 :("Question 2: What can organizations do to ensure compliance with local laws regarding data at rest?", ['A: Anually skim through regulations and laws', 'B: Constantly monitor where their data is stored', 'C: ', 'D: '], 'A: Anually skim through regulations and laws'), 
-     2 :("Question 3: What is used to protect sensitive information on receipts?", ['A: Tokenization', 'B: Hashing', 'C: Masking', 'D: Encryption']  )
+     2 :("Question 3: What is used to protect sensitive information on receipts?", ['A: Tokenization', 'B: Hashing', 'C: Masking', 'D: Encryption'])
 }
 #Establishes and associates a number to each question, allowing us to keep track of questions. 
 current_question = 0 
@@ -36,12 +34,18 @@ def start_quiz():
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
     global current_question #global tag allowing var to be modified w/ in function
-    global selected_answer ##stopping point 
+    global selected_answer 
 
     if current_question < len(Questions)-1:
+        #Increment quesiton index 
         current_question += 1
+        #Update question label 
         question_label.config(text= Questions[current_question])
+        #Update radio buttons w/ new answer choices 
+        for idx, choice in enumerate(Questions[current_question][1]):
+            radio_buttons[idx].config(text=choice, value =choice)
     else:
+        #Disable the 'next' button when no more questions
         Next_button.config(state='disabled')
 
 #If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
@@ -54,6 +58,36 @@ def show_previous_question():
     else:
         Previous_button.config(state='disabled') #Disables previous button if we are at first question
 
+#Function to check user's answer
+def check_answer(): 
+    global score, current_question
+    #Get users answer  
+    user_answer = selected_answer.get()
+
+    #check if it's correct
+    if user_answer == Questions[current_question][2]:
+        score +=1
+
+    #Move to next question if avail 
+    show_next_question()
+
+question_label = Label(q, text=Questions[current_question][0]) #Placeholder variable for questions
+question_label.pack() # Places label in center of gui window 
+
+#Var to hold user's selected answer
+selected_answer = StringVar()
+
+#Create radio buttons for answer choices 
+radio_buttons = []
+for i in range(4):
+    rb = q.Radiobutton(q, text="", Variable=selected_answer, value="")
+    rb.pacl(anchor="w")
+    radio_buttons.append(rb)
+
+#show the first questions answers
+for idx, choice in enumerate(Questions[current_question][1]):
+    radio_buttons[idx].config(text=choice, value=choice)
+
 #Places buttons in gui, when function is called upon 
 def show_buttons(): 
     Next_button.pack(side=RIGHT)
@@ -64,7 +98,7 @@ start_button = Button(q, text='Start', width = 25, command = start_quiz)
 start_button.pack() #Places button in the center of our gui window 
 stop_button = Button(q, text='Stop', width = 25, command=q.destroy)
 stop_button.pack()#Places button in the center of our gui window 
-Next_button = Button(q, text='Next Question', width = 10, command=show_next_question) #Button user interacts w/ to access other questions 
+Next_button = Button(q, text='Next Question', width = 10, command=lambda: [check_answer()]) #Button user interacts w/ to access other questions and see the results of their answer choice
 Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
 
 #All code stops here, nothing beyond this point is ran.
