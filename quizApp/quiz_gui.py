@@ -41,12 +41,27 @@ def show_next_question():
         current_question += 1
         #Update question label 
         question_label.config(text= Questions[current_question])
-        #Update radio buttons w/ new answer choices 
-        for idx, choice in enumerate(Questions[current_question][1]):
-            radio_buttons[idx].config(text=choice, value =choice)
     else:
         #Disable the 'next' button when no more questions
         Next_button.config(state='disabled')
+
+#Updates answers choices as each question changes 
+def update_answer_choices():
+    answer_choices = Questions.pop() ##Check to see how this works w/ the for loop below, it may only pop the end of the entire dictionary 
+    
+    #Update radio buttons for answer choices 
+    for i, choice in enumerate(answer_choices):
+        radio_buttons[i].config(text = choice, value = choice)
+
+#Var to hold/store user's selected answer
+selected_answer = StringVar()
+
+#Create radio buttons(4) for answer choices 
+radio_buttons = []
+for i in range(4):
+    rb = Radiobutton(q, text='', variable=selected_answer, value='')
+    rb.pack()
+    radio_buttons.append(rb)
 
 #If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
 def show_previous_question():
@@ -71,22 +86,8 @@ def check_answer():
     #Move to next question if avail 
     show_next_question()
 
-question_label = Label(q, text=Questions[current_question][0]) #Placeholder variable for questions
+question_label = Label(q, text='') #Placeholder variable for questions
 question_label.pack() # Places label in center of gui window 
-
-#Var to hold user's selected answer
-selected_answer = StringVar()
-
-#Create radio buttons for answer choices 
-radio_buttons = []
-for i in range(4):
-    rb = q.Radiobutton(q, text="", Variable=selected_answer, value="")
-    rb.pacl(anchor="w")
-    radio_buttons.append(rb)
-
-#show the first questions answers
-for idx, choice in enumerate(Questions[current_question][1]):
-    radio_buttons[idx].config(text=choice, value=choice)
 
 #Places buttons in gui, when function is called upon 
 def show_buttons(): 
