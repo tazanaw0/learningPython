@@ -14,33 +14,49 @@ opening_label.pack() #Places label in center of gui window
 
 #List of questions that we'll cycle through as the user interacts w/ gui. 
 Questions = {
-     0 :("Question 1: Which out of the following is used to protect data in transit?", ['A: SSL/TLS', 'B: Full-Disk Encryption', 'C: Switch', 'D: Applying Permissions'], 'A: SSL/TLS'),
-     1 :("Question 2: What can organizations do to ensure compliance with local laws regarding data at rest?", ['A: Anually skim through regulations and laws', 'B: Constantly monitor where their data is stored', 'C: ', 'D: '], 'A: Anually skim through regulations and laws'), 
-     2 :("Question 3: What is used to protect sensitive information on receipts?", ['A: Tokenization', 'B: Hashing', 'C: Masking', 'D: Encryption'])
+     0 :("Question 1: Which out of the following is used to protect data in transit?", 
+        ['A: SSL/TLS', 'B: Full-Disk Encryption', 'C: Switch', 'D: Applying Permissions'], 'A: SSL/TLS'),
+     1 :("Question 2: What can organizations do to ensure compliance with local laws regarding data at rest?", 
+        ['A: Anually skim through regulations and laws', 'B: Constantly monitor where their data is stored', 'C: ', 'D: '], 'A: Anually skim through regulations and laws'), 
+     2 :("Question 3: What is used to protect sensitive information on receipts?", 
+        ['A: Tokenization', 'B: Hashing', 'C: Masking', 'D: Encryption'], 'A: Tokenization')
 }
 #Establishes and associates a number to each question, allowing us to keep track of questions. 
 current_question = 0 
 #Keeps track of how many answers are right
 score = 0 
 
+#Var to hold/store user's selected answer
+selected_answer = StringVar()
+
+#Create placeholder for radio buttons 
+radio_buttons = []
 
 #Changes label (welcome msg) in main window once a user clicks start button
-def start_quiz(): 
+def start_quiz():
+    global radio_buttons 
     opening_label.config(text='You GOT this')
-    question_label.config(text=Questions[current_question])
+    question_label.config(text=Questions[current_question][0]) #Gets first value from our Question dictionary 
     #Calls function to 'pack' or display buttons once user clicks 'start'
-    show_buttons()
+    show_buttons() #Show navigation buttons
+    for i in range(4):
+        rb = Radiobutton(q, text='', variable=selected_answer, value='')
+        rb.pack()
+        radio_buttons.append(rb)
 
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
     global current_question #global tag allowing var to be modified w/ in function
-    global selected_answer 
-
     if current_question < len(Questions)-1:
         #Increment quesiton index 
         current_question += 1
         #Update question label 
-        question_label.config(text= Questions[current_question])
+        question_label.config(text= Questions[current_question][0]) #Grabs the first value from each index in our dictionary 
+        
+        #Update radio buttons 
+        for i, rb in enumerate(radio_buttons):
+            rb.config(text=Questions[current_question][1][i])
+    
     else:
         #Disable the 'next' button when no more questions
         Next_button.config(state='disabled')
@@ -53,23 +69,17 @@ def update_answer_choices():
     for i, choice in enumerate(answer_choices):
         radio_buttons[i].config(text = choice, value = choice)
 
-#Var to hold/store user's selected answer
-selected_answer = StringVar()
-
-#Create radio buttons(4) for answer choices 
-radio_buttons = []
-for i in range(4):
-    rb = Radiobutton(q, text='', variable=selected_answer, value='')
-    rb.pack()
-    radio_buttons.append(rb)
-
 #If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
 def show_previous_question():
     global current_question
     if current_question > 0:
         current_question -=1
-        question_label.config(text=Questions[current_question])
+        question_label.config(text=Questions[current_question][0])#Grabs the first value from each index in our dictionary 
         Next_button.config(state="normal")
+
+        #Update radio buttons 
+        for i, rb in enumerate(radio_buttons):
+            rb.config(text=Questions[current_question][1][i])
     else:
         Previous_button.config(state='disabled') #Disables previous button if we are at first question
 
