@@ -34,15 +34,17 @@ radio_buttons = []
 
 #Changes label (welcome msg) in main window once a user clicks start button
 def start_quiz():
-    global radio_buttons 
-    opening_label.config(text='You GOT this')
+    global radio_buttons
+    start_button.pack_forget() #Hide start button once user clicks start
+    opening_label.config(text='Good luck!')#Updates welcoming message @ top of window
     question_label.config(text=Questions[current_question][0]) #Gets first value from our Question dictionary 
     #Calls function to 'pack' or display buttons once user clicks 'start'
     show_buttons() #Show navigation buttons
     for i in range(4):
-        rb = Radiobutton(q, text='', variable=selected_answer, value='')
+        rb = Radiobutton(q, text=Questions[current_question][1][i], variable=selected_answer, value=Questions[current_question][1][i]) #Populates each buttons with answer choices from Questions dictionary
         rb.pack()
-        radio_buttons.append(rb)
+        radio_buttons.append(rb) #Keeps track of created buttons 
+
 
 # If number of questions are greater than 0, replace the question_label with a question from our list. 
 def show_next_question(): 
@@ -53,21 +55,12 @@ def show_next_question():
         #Update question label 
         question_label.config(text= Questions[current_question][0]) #Grabs the first value from each index in our dictionary 
         
-        #Update radio buttons 
+        #Updates text for each radio button
         for i, rb in enumerate(radio_buttons):
-            rb.config(text=Questions[current_question][1][i])
-    
+            rb.config(text=Questions[current_question][1][i])  
     else:
         #Disable the 'next' button when no more questions
         Next_button.config(state='disabled')
-
-#Updates answers choices as each question changes 
-def update_answer_choices():
-    answer_choices = Questions.pop() ##Check to see how this works w/ the for loop below, it may only pop the end of the entire dictionary 
-    
-    #Update radio buttons for answer choices 
-    for i, choice in enumerate(answer_choices):
-        radio_buttons[i].config(text = choice, value = choice)
 
 #If the number associated with the question is > 0 (Any question but the first), subtract one (go back) and print the question associated with that number. 
 def show_previous_question():
@@ -99,18 +92,19 @@ def check_answer():
 question_label = Label(q, text='') #Placeholder variable for questions
 question_label.pack() # Places label in center of gui window 
 
+#Create buttons
+start_button = Button(q, text='Start', width = 25, command = start_quiz)
+stop_button = Button(q, text='Stop', width = 25, command=q.destroy)
+stop_button.pack(side=BOTTOM)#Places button in the center of our gui window
+start_button.pack(side=BOTTOM) #Places button in the center of our gui window  
+Next_button = Button(q, text='Next Question', width = 10, command=lambda: [check_answer()]) #Button user interacts w/ to access other questions and see the results of their answer choice
+Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
+
 #Places buttons in gui, when function is called upon 
 def show_buttons(): 
     Next_button.pack(side=RIGHT)
     Previous_button.pack(side=LEFT)
 
-#Create buttons
-start_button = Button(q, text='Start', width = 25, command = start_quiz)
-start_button.pack() #Places button in the center of our gui window 
-stop_button = Button(q, text='Stop', width = 25, command=q.destroy)
-stop_button.pack()#Places button in the center of our gui window 
-Next_button = Button(q, text='Next Question', width = 10, command=lambda: [check_answer()]) #Button user interacts w/ to access other questions and see the results of their answer choice
-Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
 
 #All code stops here, nothing beyond this point is ran.
 #Infinite loop dependent on user interactions with gui to stop. 
