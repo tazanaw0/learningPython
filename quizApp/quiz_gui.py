@@ -99,7 +99,7 @@ stop_button.pack(side=BOTTOM)#Places button in the center of our gui window
 start_button.pack(side=BOTTOM) #Places button in the center of our gui window  
 Next_button = Button(q, text='Next Question', width = 10, command=lambda: [check_answer()]) #Button user interacts w/ to access other questions and see the results of their answer choice
 Previous_button= Button(q, text='Previous Question', width = 10, command=show_previous_question) #Button user interacts w/ to access previous question
-
+submit_quiz = Button(q, text='Submit', width=25, state='disabled') #Disabled until we can reference function in 'command' to save results to our DB. 
 #Places buttons in gui, when function is called upon 
 def show_buttons(): 
     Next_button.pack(side=RIGHT)
