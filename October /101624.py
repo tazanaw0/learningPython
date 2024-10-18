@@ -11,4 +11,4 @@ def order_pizza(pizza_type, *extratop, **delivery_info):
     else:
         print("No delivery details supplied with order.")
 
-order_pizza("Cheese", "extra cheese", "green peppers", address = "123 Sally st.", phone_num = '123-123-12345')
+order_pizza("Cheese", "extra cheese", "green peppers", address = "123 Sally street, Omaha, Nebraska 11111", phone_num = '123-123-12345')
